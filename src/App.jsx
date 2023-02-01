@@ -8,7 +8,7 @@ import "react-mde/lib/styles/css/react-mde-all.css";
 
 export default function App() {
 
-	const [notes, setNotes] = React.useState(
+	const [notes, setNotes] = React.useState(() =>
 		JSON.parse(localStorage.getItem("notes")) || []
 	);
 
