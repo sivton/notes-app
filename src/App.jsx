@@ -12,13 +12,16 @@ export default function App() {
 		JSON.parse(localStorage.getItem("notes")) || []
 	);
 
+
 	const [currentNoteId, setCurrentNoteId] = React.useState(
 		(notes[0] && notes[0].id) || ""
 	);
 
+
 	React.useEffect(() => {
 		localStorage.setItem("notes", JSON.stringify(notes));
 	}, [notes]);
+
 
 	function createNewNote() {
 		const newNote = {
@@ -30,14 +33,21 @@ export default function App() {
 	}
 
 	function updateNote(text) {
-		setNotes((oldNotes) =>
-			oldNotes.map((oldNote) => {
-				return oldNote.id === currentNoteId
-					? { ...oldNote, body: text }
-					: oldNote;
-			})
-		);
+		// Puts most recently modified note at the top of the list
+		setNotes(oldNotes => {
+			let newArray = [];
+			for (let i = 0; i < oldNotes.length; i++) {
+				let oldNote = oldNotes[i];
+				if (oldNote.id === currentNoteId) {
+					newArray.unshift({ ...oldNote, body: text });
+				} else {
+					newArray.push(oldNote);
+				}	
+			} 
+			return newArray;
+		});
 	}
+
 
 	function findCurrentNote() {
 		return (
@@ -46,6 +56,7 @@ export default function App() {
 			}) || notes[0]
 		);
 	}
+
 
 	return (
 		<main>
